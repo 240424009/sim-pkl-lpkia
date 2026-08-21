@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Schema;
 use App\Models\JurnalKegiatan;
 use App\Models\Perizinan;
 
@@ -22,24 +21,20 @@ class AppServiceProvider extends ServiceProvider
             $pendingPerizinan = 0;
 
             if (auth()->check() && auth()->user()->role === 'admin') {
-                // Hitung jurnal jika tabel dan kolomnya cocok
+                // Hitung jurnal nu can diverifikasi (status_approval nya null atawa pending)
                 if (class_exists(JurnalKegiatan::class)) {
-                    $query = JurnalKegiatan::query();
-                    $table = (new JurnalKegiatan)->getTable();
-
-                    if (Schema::hasColumn($table, 'status')) {
-                        $pendingJurnal = $query->where('status', 'Pending')->count();
-                    } elseif (Schema::hasColumn($table, 'status_verifikasi')) {
-                        $pendingJurnal = $query->where('status_verifikasi', 'Pending')->count();
-                    } else {
-                        // Jika tidak ada kolom status/verifikasi, tampilkan total jurnal yang belum di-validasi
-                        $pendingJurnal = $query->count(); 
-                    }
+                    $pendingJurnal = JurnalKegiatan::whereNull('status_approval')
+                        ->orWhere('status_approval', 'pending')
+                        ->orWhere('status_approval', 'Pending')
+                        ->count();
                 }
 
-                // Hitung perizinan
+                // Hitung perizinan nu can diverifikasi
                 if (class_exists(Perizinan::class)) {
-                    $pendingPerizinan = Perizinan::where('status', 'Pending')->count();
+                    $pendingPerizinan = Perizinan::whereNull('status')
+                        ->orWhere('status', 'pending')
+                        ->orWhere('status', 'Pending')
+                        ->count();
                 }
             }
 
