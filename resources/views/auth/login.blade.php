@@ -4,7 +4,7 @@
         <!-- LOGO & HEADER JUDUL -->
         <div class="flex flex-col items-center mb-6">
             <a href="/">
-                <img src="{{ asset('images/logo_IDE_transparan.png') }}" alt="Logo LPKIA" class="h-20 w-auto object-contain">
+                <img src="{{ asset('images/Institut Digital Ekonomi LPKIA Bandung.png') }}" alt="Logo LPKIA" class="h-20 w-auto object-contain">
             </a>
 
             <!-- Badge Penjelas -->

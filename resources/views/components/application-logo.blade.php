@@ -1,1 +1,1 @@
-<img src="{{ asset('images/logo_IDE_transparan.png') }}" alt="Logo LPKIA" class="h-16 w-auto mx-auto object-contain">
+<img src="{{ asset('images/Institut Digital Ekonomi LPKIA Bandung.png') }}" alt="Logo LPKIA" class="h-16 w-auto mx-auto object-contain">
