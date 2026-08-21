@@ -29,11 +29,10 @@
             </div>
 
             <!-- KARTU STATISTIK & MENU UTAMA -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
                 <!-- 📊 CARD 1: TOTAL SISWA PKL -->
                 <div class="group relative overflow-hidden bg-gradient-to-br from-indigo-50/90 via-white to-blue-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-indigo-100 hover:border-indigo-400">
-                    <!-- Motif Background Aksen -->
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-indigo-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-600"></div>
 
@@ -56,7 +55,6 @@
 
                 <!-- 📱 CARD 2: QR CODE PRESENSI -->
                 <div class="group relative overflow-hidden bg-gradient-to-br from-sky-50/90 via-white to-blue-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-sky-100 hover:border-sky-400">
-                    <!-- Motif Background Aksen -->
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-sky-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-sky-500"></div>
 
@@ -82,7 +80,6 @@
 
                 <!-- 📝 CARD 3: VERIFIKASI JURNAL -->
                 <div class="group relative overflow-hidden bg-gradient-to-br from-emerald-50/90 via-white to-teal-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-emerald-100 hover:border-emerald-400">
-                    <!-- Motif Background Aksen -->
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-500"></div>
 
@@ -102,6 +99,31 @@
                         </div>
                         <div class="p-3.5 bg-emerald-100/80 rounded-2xl text-emerald-600 group-hover:scale-110 shadow-sm transition-transform duration-200">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ✉️ CARD 4: VERIFIKASI PERIZINAN -->
+                <div class="group relative overflow-hidden bg-gradient-to-br from-amber-50/90 via-white to-orange-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-amber-100 hover:border-amber-400">
+                    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-amber-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500"></div>
+
+                    <div class="relative z-10 flex items-start justify-between">
+                        <div>
+                            <p class="text-xs font-extrabold text-amber-900/60 uppercase tracking-wider">Perizinan Siswa</p>
+                            <h4 class="text-xl font-bold text-amber-950 mt-2">
+                                Verifikasi Perizinan
+                            </h4>
+                            <p class="text-xs text-slate-500 mt-1 line-clamp-2">
+                                Cek surat izin & ketidakhadiran siswa PKL.
+                            </p>
+                            <a href="{{ route('admin.perizinan.index') }}" class="inline-flex items-center text-xs font-bold text-amber-600 hover:text-amber-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
+                                Buka Verifikasi
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                            </a>
+                        </div>
+                        <div class="p-3.5 bg-amber-100/80 rounded-2xl text-amber-600 group-hover:scale-110 shadow-sm transition-transform duration-200">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                         </div>
                     </div>
                 </div>
