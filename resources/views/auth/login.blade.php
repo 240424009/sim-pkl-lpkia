@@ -2,27 +2,30 @@
     <div class="w-full sm:max-w-md px-8 py-8 bg-white shadow-2xl rounded-2xl border-t-8 border-red-600">
         
         <!-- LOGO & HEADER JUDUL -->
-        <div class="flex flex-col items-center mb-6">
-            <a href="/">
-                <img src="{{ asset('images/Institut Digital Ekonomi LPKIA Bandung.png') }}" alt="Logo LPKIA" class="h-20 w-auto object-contain">
-            </a>
+        <div class="text-center mb-6">
+            <!-- Logo LPKIA -->
+            <img src="{{ asset('images/Institut Digital Ekonomi LPKIA Bandung.png') }}" alt="Logo LPKIA" class="h-16 mx-auto mb-3 object-contain">
 
-            <!-- Badge Penjelas -->
-            <span class="mt-3 inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-900 border border-blue-200 tracking-wider uppercase">
-                Sistem Informasi
-            </span>
+            <!-- Nama Naungan Utama (Kampus) -->
+            <h2 class="text-base font-extrabold text-red-600 uppercase tracking-wide">
+                INSTITUT DIGITAL EKONOMI LPKIA
+            </h2>
 
-            <!-- SIM-PKL HIGHLIGHT UTAMA -->
-            <h1 class="mt-1 text-4xl font-black tracking-tight text-blue-900">
+            <!-- Pill / Badge Luhur -->
+            <div class="mt-2 mb-1">
+                <span class="inline-block px-3 py-0.5 bg-blue-100/80 text-blue-700 font-extrabold text-[10px] uppercase tracking-wider rounded-full">
+                    PORTAL MASUK
+                </span>
+            </div>
+
+            <!-- Judul Aplikasi -->
+            <h1 class="text-3xl font-black text-slate-800 tracking-tight">
                 SIM-PKL
             </h1>
 
-            <!-- Subtitle LPKIA -->
-            <p class="text-xs font-bold text-red-600 tracking-wider uppercase mt-1">
-                Institut Digital Ekonomi LPKIA
-            </p>
-            <p class="text-[11px] font-semibold text-gray-500 mt-0.5">
-                Monitoring Presensi & Jurnal PKL
+            <!-- Sub-Text Kepanjangan -->
+            <p class="text-xs font-semibold text-slate-500 mt-0.5">
+                Sistem Informasi & Monitoring PKL
             </p>
         </div>
 
