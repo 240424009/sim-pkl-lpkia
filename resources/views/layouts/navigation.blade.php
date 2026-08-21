@@ -40,11 +40,25 @@
                         <x-nav-link :href="route('admin.qr.index')" :active="request()->routeIs('admin.qr.*')">
                             {{ __('📱 QR Code Presensi') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.jurnal.index')" :active="request()->routeIs('admin.jurnal.*')">
-                            {{ __('📑 Verifikasi Jurnal') }}
+                        
+                        <!-- Verifikasi Jurnal ku Badge Notifikasi -->
+                        <x-nav-link :href="route('admin.jurnal.index')" :active="request()->routeIs('admin.jurnal.*')" class="relative inline-flex items-center">
+                            📑 {{ __('Verifikasi Jurnal') }}
+                            @if(isset($pendingJurnalCount) && $pendingJurnalCount > 0)
+                                <span class="ml-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse">
+                                    {{ $pendingJurnalCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.perizinan.index')" :active="request()->routeIs('admin.perizinan.*')">
+
+                        <!-- Verifikasi Perizinan ku Badge Notifikasi -->
+                        <x-nav-link :href="route('admin.perizinan.index')" :active="request()->routeIs('admin.perizinan.*')" class="relative inline-flex items-center">
                             ✉️ {{ __('Verifikasi Perizinan') }}
+                            @if(isset($pendingPerizinanCount) && $pendingPerizinanCount > 0)
+                                <span class="ml-1.5 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse">
+                                    {{ $pendingPerizinanCount }}
+                                </span>
+                            @endif
                         </x-nav-link>
                     @endif
 
@@ -111,6 +125,15 @@
                 <x-responsive-nav-link :href="route('siswa.dashboard')" :active="request()->routeIs('siswa.dashboard')">
                     {{ __('Dashboard') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('siswa.presensi.index')" :active="request()->routeIs('siswa.presensi.*')">
+                    {{ __('📱 Presensi') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('siswa.jurnal.index')" :active="request()->routeIs('siswa.jurnal.*')">
+                    {{ __('📖 Jurnal Kegiatan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('siswa.perizinan.index')" :active="request()->routeIs('siswa.perizinan.*')">
+                    📩 {{ __('Izin / Sakit') }}
+                </x-responsive-nav-link>
             @elseif(auth()->user()->role === 'admin')
                 <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
                     {{ __('Dashboard') }}
@@ -122,7 +145,16 @@
                     {{ __('📱 QR Code Presensi') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.jurnal.index')" :active="request()->routeIs('admin.jurnal.*')">
-                    {{ __('📑 Verifikasi Jurnal') }}
+                    📑 {{ __('Verifikasi Jurnal') }} 
+                    @if(isset($pendingJurnalCount) && $pendingJurnalCount > 0)
+                        <span class="ml-2 px-2 py-0.5 text-xs bg-red-600 text-white rounded-full font-bold">{{ $pendingJurnalCount }}</span>
+                    @endif
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.perizinan.index')" :active="request()->routeIs('admin.perizinan.*')">
+                    ✉️ {{ __('Verifikasi Perizinan') }}
+                    @if(isset($pendingPerizinanCount) && $pendingPerizinanCount > 0)
+                        <span class="ml-2 px-2 py-0.5 text-xs bg-red-600 text-white rounded-full font-bold">{{ $pendingPerizinanCount }}</span>
+                    @endif
                 </x-responsive-nav-link>
             @elseif(auth()->user()->role === 'guru')
                 <x-responsive-nav-link :href="route('guru.dashboard')" :active="request()->routeIs('guru.dashboard')">
