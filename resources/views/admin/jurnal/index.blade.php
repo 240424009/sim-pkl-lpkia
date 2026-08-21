@@ -15,7 +15,60 @@
             @endif
 
             <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Daftar Jurnal Masuk</h3>
+                
+                <!-- HEADER & FILTER PERIODE PER BULAN -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between pb-4 mb-4 border-b border-gray-100 gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">Daftar Jurnal Masuk</h3>
+                        <p class="text-xs text-gray-500">Filter data jurnal berdasarkan bulan dan tahun kegiatan.</p>
+                    </div>
+
+                    <!-- FORM FILTER -->
+                    <form method="GET" action="{{ route('admin.jurnal.index') }}" class="flex items-center gap-2 flex-wrap">
+                        <!-- Select Bulan -->
+                        <select name="bulan" class="text-xs rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 py-2">
+                            <option value="">-- Semua Bulan --</option>
+                            @php
+                                $namaBulan = [
+                                    '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', 
+                                    '04' => 'April', '05' => 'Mei', '06' => 'Juni', 
+                                    '07' => 'Juli', '08' => 'Agustus', '09' => 'September', 
+                                    '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                                ];
+                                $selectedBulan = $bulanSelected ?? request('bulan');
+                                $selectedTahun = $tahunSelected ?? request('tahun', date('Y'));
+                            @endphp
+                            @foreach($namaBulan as $key => $bulan)
+                                <option value="{{ $key }}" {{ ($selectedBulan == $key) ? 'selected' : '' }}>
+                                    {{ $bulan }}
+                                </option>
+                            @endforeach
+                        </select>
+
+                        <!-- Select Tahun -->
+                        <select name="tahun" class="text-xs rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 py-2">
+                            @for($y = date('Y'); $y >= date('Y') - 2; $y--)
+                                <option value="{{ $y }}" {{ ($selectedTahun == $y) ? 'selected' : '' }}>
+                                    {{ $y }}
+                                </option>
+                            @endfor
+                        </select>
+
+                        <!-- Tombol Filter -->
+                        <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.447.894l-4 2A1 1 0 017 21v-7.586L2.293 6.707A1 1 0 012 6V4z"/></svg>
+                            Filter
+                        </button>
+
+                        @if(request('bulan'))
+                            <a href="{{ route('admin.jurnal.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-3 py-2 rounded-lg font-medium transition">
+                                Reset
+                            </a>
+                        @endif
+                    </form>
+                </div>
+
+                <!-- TABEL DATA -->
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -75,12 +128,18 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="text-center py-4 text-gray-500">Belum ada jurnal yang dikirim oleh siswa.</td>
+                                    <td colspan="5" class="text-center py-6 text-gray-500">Tidak ada data jurnal pada periode bulan yang dipilih.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
+
+                <!-- PAGINATION LINK -->
+                <div class="mt-4">
+                    {{ $jurnals->links() }}
+                </div>
+
             </div>
 
         </div>

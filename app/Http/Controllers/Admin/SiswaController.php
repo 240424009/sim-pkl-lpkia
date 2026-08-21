@@ -11,12 +11,41 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class SiswaController extends Controller
 {
     /**
-     * Tampilkan daftar siswa PKL.
+     * Tampilkan daftar siswa PKL dengan Filter Rentang Bulan.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $siswas = User::where('role', 'siswa')->latest()->get();
-        return view('admin.siswa.index', compact('siswas'));
+        $query = User::where('role', 'siswa');
+
+        $bulanMulai = $request->bulan_mulai;
+        $bulanSelesai = $request->bulan_selesai;
+        $tahunSelected = $request->tahun ?? date('Y');
+
+        if ($request->filled('bulan_mulai') && $request->filled('bulan_selesai')) {
+            $bMulai = sprintf('%02d', $request->bulan_mulai);
+            $bSelesai = sprintf('%02d', $request->bulan_selesai);
+            
+            $startDate = "$tahunSelected-$bMulai-01";
+            $endDate = date('Y-m-t', strtotime("$tahunSelected-$bSelesai-01"));
+
+            $query->where(function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('tanggal_mulai_pkl', [$startDate, $endDate])
+                  ->orWhereBetween('tanggal_selesai_pkl', [$startDate, $endDate])
+                  ->orWhere(function ($sub) use ($startDate, $endDate) {
+                      $sub->where('tanggal_mulai_pkl', '<=', $startDate)
+                          ->where('tanggal_selesai_pkl', '>=', $endDate);
+                  });
+            });
+        } elseif ($request->filled('tahun')) {
+            $query->where(function ($q) use ($tahunSelected) {
+                $q->whereYear('tanggal_mulai_pkl', $tahunSelected)
+                  ->orWhereYear('tanggal_selesai_pkl', $tahunSelected);
+            });
+        }
+
+        $siswas = $query->latest()->get();
+
+        return view('admin.siswa.index', compact('siswas', 'bulanMulai', 'bulanSelesai', 'tahunSelected'));
     }
 
     /**
@@ -32,7 +61,6 @@ class SiswaController extends Controller
      */
     public function store(Request $request)
     {
-        // 🟢 HAPUS VALIDASI PASSWORD DI DIEU
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -45,7 +73,7 @@ class SiswaController extends Controller
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make('password123'), // 🔑 Password otomatis
+            'password' => Hash::make('password123'),
             'role' => 'siswa',
             'asal_sekolah' => $request->asal_sekolah,
             'departemen_lpkia' => $request->departemen_lpkia,
@@ -85,29 +113,46 @@ class SiswaController extends Controller
             'alamat' => 'nullable|string',
         ]);
 
-        // Ambil data inputan
         $data = $request->only([
             'name', 'email', 'asal_sekolah', 'departemen_lpkia', 
             'tanggal_mulai_pkl', 'tanggal_selesai_pkl',
             'nisn', 'no_hp', 'nama_orang_tua', 'alamat'
         ]);
 
-        // Update password jika diisi oleh admin
         if ($request->filled('password')) {
             $request->validate(['password' => 'string|min:8']);
-            $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+            $data['password'] = Hash::make($request->password);
         }
 
-        // Simpen ka database
         $siswa->update($data);
 
         return redirect()->route('admin.siswa.index')->with('success', 'Data & biodata siswa berhasil diperbarui!');
     }
 
     // 🟢 FUNGSI EXPORT PDF
-    public function exportPdf()
+    public function exportPdf(Request $request)
     {
-        $siswas = User::where('role', 'siswa')->get();
+        $query = User::where('role', 'siswa');
+
+        if ($request->filled('bulan_mulai') && $request->filled('bulan_selesai')) {
+            $bMulai = sprintf('%02d', $request->bulan_mulai);
+            $bSelesai = sprintf('%02d', $request->bulan_selesai);
+            $tahun = $request->tahun ?? date('Y');
+            
+            $startDate = "$tahun-$bMulai-01";
+            $endDate = date('Y-m-t', strtotime("$tahun-$bSelesai-01"));
+
+            $query->where(function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('tanggal_mulai_pkl', [$startDate, $endDate])
+                  ->orWhereBetween('tanggal_selesai_pkl', [$startDate, $endDate])
+                  ->orWhere(function ($sub) use ($startDate, $endDate) {
+                      $sub->where('tanggal_mulai_pkl', '<=', $startDate)
+                          ->where('tanggal_selesai_pkl', '>=', $endDate);
+                  });
+            });
+        }
+
+        $siswas = $query->get();
         $pdf = Pdf::loadView('admin.siswa.pdf', compact('siswas'))->setPaper('a4', 'landscape');
         return $pdf->download('Rekap_Data_Siswa_PKL_LPKIA.pdf');
     }

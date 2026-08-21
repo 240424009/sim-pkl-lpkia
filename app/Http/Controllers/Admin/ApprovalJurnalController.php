@@ -8,14 +8,30 @@ use Illuminate\Http\Request;
 
 class ApprovalJurnalController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Ambil semua jurnal beserta data siswa
-        $jurnals = JurnalKegiatan::with('user')
-            ->orderBy('tanggal', 'desc')
-            ->paginate(15);
+        $query = JurnalKegiatan::with('user');
 
-        return view('admin.jurnal.index', compact('jurnals'));
+        // Filter per Bulan
+        if ($request->filled('bulan')) {
+            $query->whereMonth('tanggal', $request->bulan);
+        }
+
+        // Filter per Tahun (default taun ayeuna mun teu dipilih)
+        if ($request->filled('tahun')) {
+            $query->whereYear('tanggal', $request->tahun);
+        } else {
+            $query->whereYear('tanggal', date('Y'));
+        }
+
+        $jurnals = $query->orderBy('tanggal', 'desc')
+                         ->paginate(15)
+                         ->withQueryString(); // Ngaluluzkeun parameter filter pas berpindah halaman pagination
+
+        $bulanSelected = $request->bulan;
+        $tahunSelected = $request->tahun ?? date('Y');
+
+        return view('admin.jurnal.index', compact('jurnals', 'bulanSelected', 'tahunSelected'));
     }
 
     public function update(Request $request, $id)

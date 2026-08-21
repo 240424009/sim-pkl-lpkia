@@ -9,29 +9,89 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 rounded-lg shadow-sm">
                 
-                <!-- HEADER TOMBOL AKSI UTAMA -->
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
-                    <h3 class="text-lg font-bold text-gray-700">Daftar Anak PKL</h3>
+                <!-- HEADER TOMBOL AKSI UTAMA & FILTER PERIODE PKL -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-4 mb-6 border-b border-gray-100 gap-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-700">Daftar Anak PKL</h3>
+                    </div>
                     
-                    <div class="flex flex-wrap gap-2">
-                        <!-- 📄 TOMBOL EXPORT PDF -->
-                        <a href="{{ route('admin.siswa.export-pdf') }}" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-1">
-                            📄 Save As PDF
-                        </a>
+                    <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
+                        <!-- 🔍 FORM FILTER RENTANG PERIODE PKL -->
+                        <form method="GET" action="{{ route('admin.siswa.index') }}" class="flex items-center gap-2 flex-wrap">
+                            @php
+                                $namaBulan = [
+                                    '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', 
+                                    '04' => 'April', '05' => 'Mei', '06' => 'Juni', 
+                                    '07' => 'Juli', '08' => 'Agustus', '09' => 'September', 
+                                    '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                                ];
+                                $bMulai = $bulanMulai ?? request('bulan_mulai');
+                                $bSelesai = $bulanSelesai ?? request('bulan_selesai');
+                                $selectedTahun = $tahunSelected ?? request('tahun', date('Y'));
+                            @endphp
 
-                        <!-- 🗑️ TOMBOL HAPUS SEMUA -->
-                        <form action="{{ route('admin.siswa.delete-all') }}" method="POST" onsubmit="return confirm('PERHATIAN! Apakah Anda yakin ingin menghapus SELURUH data siswa PKL? Data tidak bisa dikembalikan.');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="px-3 py-2 bg-gray-800 hover:bg-black text-white font-bold text-xs rounded-lg shadow transition">
-                                🗑️ Hapus Semua Data
+                            <!-- Select Bulan Mulai -->
+                            <select name="bulan_mulai" class="text-xs rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 py-2">
+                                <option value="">-- Bulan Mulai --</option>
+                                @foreach($namaBulan as $key => $bulan)
+                                    <option value="{{ $key }}" {{ ($bMulai == $key) ? 'selected' : '' }}>
+                                        {{ $bulan }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <span class="text-xs font-bold text-gray-400">s/d</span>
+
+                            <!-- Select Bulan Selesai -->
+                            <select name="bulan_selesai" class="text-xs rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 py-2">
+                                <option value="">-- Bulan Selesai --</option>
+                                @foreach($namaBulan as $key => $bulan)
+                                    <option value="{{ $key }}" {{ ($bSelesai == $key) ? 'selected' : '' }}>
+                                        {{ $bulan }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- Select Tahun -->
+                            <select name="tahun" class="text-xs rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 py-2">
+                                @for($y = date('Y'); $y >= date('Y') - 2; $y--)
+                                    <option value="{{ $y }}" {{ ($selectedTahun == $y) ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endfor
+                            </select>
+
+                            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs px-3 py-2 rounded-lg font-bold transition flex items-center gap-1 shadow-sm">
+                                🔍 Filter
                             </button>
+
+                            @if(request('bulan_mulai'))
+                                <a href="{{ route('admin.siswa.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-3 py-2 rounded-lg font-medium transition">
+                                    Reset
+                                </a>
+                            @endif
                         </form>
 
-                        <!-- ➕ TOMBOL TAMBAH SISWA -->
-                        <a href="{{ route('admin.siswa.create') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow transition">
-                            + Tambah Siswa PKL
-                        </a>
+                        <div class="flex flex-wrap gap-2">
+                            <!-- 📄 TOMBOL EXPORT PDF -->
+                            <a href="{{ route('admin.siswa.export-pdf', ['bulan_mulai' => request('bulan_mulai'), 'bulan_selesai' => request('bulan_selesai'), 'tahun' => request('tahun')]) }}" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-1">
+                                📄 Save As PDF
+                            </a>
+
+                            <!-- 🗑️ TOMBOL HAPUS SEMUA -->
+                            <form action="{{ route('admin.siswa.delete-all') }}" method="POST" onsubmit="return confirm('PERHATIAN! Apakah Anda yakin ingin menghapus SELURUH data siswa PKL? Data tidak bisa dikembalikan.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-3 py-2 bg-gray-800 hover:bg-black text-white font-bold text-xs rounded-lg shadow transition">
+                                    🗑️ Hapus Semua Data
+                                </button>
+                            </form>
+
+                            <!-- ➕ TOMBOL TAMBAH SISWA -->
+                            <a href="{{ route('admin.siswa.create') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-lg shadow transition">
+                                + Tambah Siswa PKL
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -114,7 +174,9 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="p-4 text-center text-gray-500">Belum ada data siswa PKL.</td>
+                                    <td colspan="6" class="p-6 text-center text-gray-500">
+                                        Tidak ada data siswa PKL pada rentang periode yang dipilih.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
