@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Siswa\PresensiController;
+use App\Http\Controllers\PerizinanController;
 use App\Models\User;
 
 // Redirect Halaman Utama ka Login
@@ -51,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/jurnal', [\App\Http\Controllers\Admin\ApprovalJurnalController::class, 'index'])->name('jurnal.index');
         Route::put('/jurnal/{id}', [\App\Http\Controllers\Admin\ApprovalJurnalController::class, 'update'])->name('jurnal.update');
 
+        // 🟢 ROUTE PERIZINAN ADMIN
+        Route::get('/perizinan', [PerizinanController::class, 'indexAdmin'])->name('perizinan.index');
+        Route::patch('/perizinan/{id}/status', [PerizinanController::class, 'updateStatusAdmin'])->name('perizinan.update-status');
+
         // 🟢 ROUTE EXPORT PDF & DELETE ALL (Wajib di luhureun resource)
         Route::get('/siswa/export-pdf', [\App\Http\Controllers\Admin\SiswaController::class, 'exportPdf'])->name('siswa.export-pdf');
         Route::delete('/siswa/delete-all', [\App\Http\Controllers\Admin\SiswaController::class, 'deleteAll'])->name('siswa.delete-all');
@@ -76,6 +81,11 @@ Route::middleware(['auth'])->group(function () {
         // Jurnal Siswa
         Route::get('/jurnal', [\App\Http\Controllers\Siswa\JurnalController::class, 'index'])->name('jurnal.index');
         Route::post('/jurnal', [\App\Http\Controllers\Siswa\JurnalController::class, 'store'])->name('jurnal.store');
+
+        // 🟢 ROUTE PERIZINAN SISWA
+        Route::get('/perizinan', [PerizinanController::class, 'indexSiswa'])->name('perizinan.index');
+        Route::get('/perizinan/create', [PerizinanController::class, 'createSiswa'])->name('perizinan.create');
+        Route::post('/perizinan', [PerizinanController::class, 'storeSiswa'])->name('perizinan.store');
     });
 
     // === ROUTE GURU (Pembimbing Sekolah) ===

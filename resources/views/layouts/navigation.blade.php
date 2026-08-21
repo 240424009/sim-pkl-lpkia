@@ -24,6 +24,9 @@
                         <x-nav-link :href="route('siswa.jurnal.index')" :active="request()->routeIs('siswa.jurnal.*')">
                             {{ __('📖 Jurnal Kegiatan') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('siswa.perizinan.index')" :active="request()->routeIs('siswa.perizinan.*')">
+                            📩 {{ __('Izin / Sakit') }}
+                        </x-nav-link>
                     @endif
 
                     <!-- 👨‍💼 MENU ADMIN / PEMBIMBING LPKIA -->
@@ -39,6 +42,9 @@
                         </x-nav-link>
                         <x-nav-link :href="route('admin.jurnal.index')" :active="request()->routeIs('admin.jurnal.*')">
                             {{ __('📑 Verifikasi Jurnal') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.perizinan.index')" :active="request()->routeIs('admin.perizinan.*')">
+                            ✉️ {{ __('Verifikasi Perizinan') }}
                         </x-nav-link>
                     @endif
 
