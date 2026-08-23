@@ -57,7 +57,7 @@
                                     <td class="p-3 text-gray-700 text-xs">{{ $item->alasan }}</td>
                                     <td class="p-3">
                                         @if($item->bukti_dokumen)
-                                            <a href="{{ asset('storage/' . $item->bukti_dokumen) }}" target="_blank" class="text-indigo-600 underline text-xs font-bold">
+                                            <a href="{{ route('preview.bukti', basename($item->bukti_dokumen)) }}" target="_blank" class="text-indigo-600 underline text-xs font-bold">
                                                 📄 Lihat Bukti
                                             </a>
                                         @else
@@ -77,21 +77,21 @@
                                         @if($item->status == 'Pending')
                                             <div class="flex justify-center gap-1">
                                                 <!-- Form Setujui -->
-                                                <form action="{{ route('admin.perizinan.update-status', $item->id) }}" method="POST" class="inline">
+                                                <form id="form-setujui-{{ $item->id }}" action="{{ route('admin.perizinan.update-status', $item->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('PATCH')
                                                     <input type="hidden" name="status" value="Disetujui">
-                                                    <button type="submit" onclick="return confirm('Setujui izin ini?')" class="px-2.5 py-1.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded shadow-sm">
+                                                    <button type="button" onclick="konfirmasiVerifikasi('{{ $item->id }}', 'Disetujui')" class="px-2.5 py-1.5 bg-green-600 hover:bg-green-700 text-white font-bold text-xs rounded shadow-sm">
                                                         ✅ Setujui
                                                     </button>
                                                 </form>
 
                                                 <!-- Form Tolak -->
-                                                <form action="{{ route('admin.perizinan.update-status', $item->id) }}" method="POST" class="inline">
+                                                <form id="form-tolak-{{ $item->id }}" action="{{ route('admin.perizinan.update-status', $item->id) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('PATCH')
                                                     <input type="hidden" name="status" value="Ditolak">
-                                                    <button type="submit" onclick="return confirm('Tolak izin ini?')" class="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded shadow-sm">
+                                                    <button type="button" onclick="konfirmasiVerifikasi('{{ $item->id }}', 'Ditolak')" class="px-2.5 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs rounded shadow-sm">
                                                         ❌ Tolak
                                                     </button>
                                                 </form>
@@ -112,4 +112,33 @@
             </div>
         </div>
     </div>
+
+    <!-- Script SweetAlert2 Konfirmasi di Tengah Layar -->
+    <script>
+        function konfirmasiVerifikasi(id, status) {
+            let isSetuju = (status === 'Disetujui');
+
+            Swal.fire({
+                title: isSetuju ? 'Setujui Izin Ini?' : 'Tolak Izin Ini?',
+                text: isSetuju ? 'Pengajuan izin siswa bakal disetujui.' : 'Pengajuan izin siswa bakal ditolak.',
+                icon: isSetuju ? 'question' : 'warning',
+                showCancelButton: true,
+                confirmButtonColor: isSetuju ? '#16a34a' : '#dc2626',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: isSetuju ? 'Ya, Setujui!' : 'Ya, Tolak!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    popup: 'rounded-xl'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    if (isSetuju) {
+                        document.getElementById('form-setujui-' + id).submit();
+                    } else {
+                        document.getElementById('form-tolak-' + id).submit();
+                    }
+                }
+            });
+        }
+    </script>
 </x-app-layout>

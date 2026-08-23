@@ -14,6 +14,17 @@ Route::get('/', function () {
 // Middleware Auth (Kudu Login Hula)
 Route::middleware(['auth'])->group(function () {
 
+    // === ROUTE BUKTI PERIZINAN ===
+    Route::get('/preview-bukti/{filename}', function ($filename) {
+        $path = storage_path('app/public/bukti_perizinan/' . $filename);
+        
+        if (!file_exists($path)) {
+            abort(404);
+        }
+
+        return response()->file($path);
+    })->name('preview.bukti');
+
     // === ROUTE PROFILE (Bawaan Breeze) ===
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
