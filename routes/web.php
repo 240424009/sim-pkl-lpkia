@@ -73,6 +73,10 @@ Route::middleware(['auth'])->group(function () {
 
         // 🟢 ROUTE RESOURCE SISWA (Dipasang sakali wae di handap)
         Route::resource('siswa', \App\Http\Controllers\Admin\SiswaController::class)->except(['show']);
+
+        // 🟢 ROUTE PRESENSI MANUAL KHUSUS ADMIN
+        Route::get('/presensi-manual', [\App\Http\Controllers\Admin\SiswaController::class, 'createPresensiManual'])->name('presensi.manual.create');
+        Route::post('/presensi-manual', [\App\Http\Controllers\Admin\SiswaController::class, 'storePresensiManual'])->name('presensi.manual.store');
     });
 
     // === ROUTE SISWA (Anak SMK) ===

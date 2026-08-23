@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Presensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -171,5 +172,42 @@ class SiswaController extends Controller
     {
         User::where('role', 'siswa')->delete();
         return redirect()->route('admin.siswa.index')->with('success', 'Semua data siswa PKL berhasil dibersihkan!');
+    }
+
+    // Form Presensi Manual
+    public function createPresensiManual()
+    {
+        $siswas = User::where('role', 'siswa')->get();
+        return view('admin.presensi.create_manual', compact('siswas'));
+    }
+
+    // Simpen Presensi Manual
+    public function storePresensiManual(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'tanggal' => 'required|date',
+            'jam_masuk' => 'required',
+            'status' => 'required|in:Hadir,Izin,Sakit,Alfa',
+            'keterangan' => 'nullable|string',
+        ]);
+
+        $cek = Presensi::where('user_id', $request->user_id)
+                    ->whereDate('tanggal', $request->tanggal)
+                    ->first();
+
+        if ($cek) {
+            return redirect()->back()->with('error', 'Siswa ieu tos ngagaduhan data presensi dina tanggal kasebut!');
+        }
+
+        Presensi::create([
+            'user_id' => $request->user_id,
+            'tanggal' => $request->tanggal,
+            'jam_masuk' => $request->jam_masuk,
+            'status' => $request->status,
+            'keterangan' => $request->keterangan ?? 'Input Manual ku Admin (HP Siswa Bermasalah)',
+        ]);
+
+        return redirect()->back()->with('success', 'Presensi manual berhasil ditambahkan!');
     }
 }
