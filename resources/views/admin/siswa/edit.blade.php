@@ -78,9 +78,11 @@
                         <div class="mb-5">
                             <label class="block text-sm font-medium text-gray-700 mb-2">Pas Foto Siswa</label>
                             @if($siswa->foto)
-                                <img src="{{ asset('storage/' . $siswa->foto) }}" alt="Pas Foto {{ $siswa->name }}" class="w-32 h-40 object-cover rounded-lg border-2 border-indigo-500 shadow-md">
+                                <img src="{{ route('preview.bukti', $siswa->foto) }}" 
+                                    alt="Pas Foto {{ $siswa->name }}" 
+                                    class="w-32 h-40 object-cover rounded-lg border-2 border-indigo-500 shadow-sm">
                             @else
-                                <div class="w-32 h-40 bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center text-xs text-gray-400 font-medium">
+                                <div class="w-32 h-40 bg-gray-100 rounded-lg border border-gray-300 flex items-center justify-center text-gray-400 text-xs">
                                     Belum Upload Foto
                                 </div>
                             @endif

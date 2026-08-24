@@ -15,15 +15,16 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
 
     // === ROUTE BUKTI PERIZINAN ===
-    Route::get('/preview-bukti/{filename}', function ($filename) {
-        $path = storage_path('app/public/bukti_perizinan/' . $filename);
-        
-        if (!file_exists($path)) {
-            abort(404);
-        }
+    Route::get('/preview-bukti/{path}', function ($path) {
+    // Maca langsung ka storage/app/public dumasar kana path nu dikirim
+    $filePath = storage_path('app/public/' . urldecode($path));
 
-        return response()->file($path);
-    })->name('preview.bukti');
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+
+    return response()->file($filePath);
+})->where('path', '.*')->name('preview.bukti');
 
     // === ROUTE PROFILE (Bawaan Breeze) ===
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -120,9 +120,14 @@
                                         <!-- AVATAR & NAMA -->
                                         <div class="flex items-center gap-3">
                                             @if($siswa->foto)
-                                                <img src="{{ asset('storage/' . $siswa->foto) }}" alt="{{ $siswa->name }}" class="w-10 h-10 rounded-full object-cover border border-gray-300 shadow-sm">
+                                                <img src="{{ route('preview.bukti', $siswa->foto) }}" 
+                                                    alt="{{ $siswa->name }}" 
+                                                    class="w-10 h-10 rounded-full object-cover border border-gray-200 shadow-sm">
                                             @else
-                                                <img src="https://ui-avatars.com/api/?name={{ urlencode($siswa->name) }}&background=6366f1&color=ffffff" alt="{{ $siswa->name }}" class="w-10 h-10 rounded-full border border-gray-300 shadow-sm">
+                                                <!-- Inisial Name mun teu acan aya foto -->
+                                                <div class="w-10 h-10 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shadow-sm">
+                                                    {{ strtoupper(substr($siswa->name, 0, 2)) }}
+                                                </div>
                                             @endif
                                             <div>
                                                 <div class="font-bold text-gray-800">{{ $siswa->name }}</div>

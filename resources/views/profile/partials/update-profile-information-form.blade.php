@@ -19,11 +19,13 @@
         @method('patch')
 
         <!-- 🟢 PREVIEW PAS FOTO SAAT INI (Mun geus di-upload) -->
-        @if($user->foto)
+        @if(auth()->user()->foto)
             <div>
                 <x-input-label value="Pas Foto Saat Ini" />
                 <div class="mt-2">
-                    <img src="{{ asset('storage/' . $user->foto) }}" alt="Pas Foto {{ $user->name }}" class="w-32 h-40 object-cover rounded-lg border-2 border-indigo-500 shadow-sm">
+                    <img src="{{ route('preview.bukti', auth()->user()->foto) }}" 
+                        alt="Pas Foto {{ auth()->user()->name }}" 
+                        class="w-32 h-40 object-cover rounded-lg border-2 border-indigo-500 shadow-sm">
                 </div>
             </div>
         @endif
