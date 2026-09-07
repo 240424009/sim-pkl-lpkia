@@ -26,6 +26,24 @@
                 <h3 class="text-lg font-bold text-gray-700 mb-2">Presensi Hari Ini</h3>
                 <p class="text-sm text-gray-500 mb-6">{{ \Carbon\Carbon::now()->isoFormat('D MMMM Y') }}</p>
 
+                <!-- 🟢 TOMBOL UTAMA: SCAN QR CODE -->
+                <div class="mb-6">
+                    <a href="{{ route('siswa.scan.index') }}" 
+                       class="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg transition transform active:scale-95">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+                        </svg>
+                        <span>📷 Buka Kamera Scan QR Code</span>
+                    </a>
+                </div>
+
+                <div class="relative flex py-2 items-center mb-6">
+                    <div class="flex-grow border-t border-gray-200"></div>
+                    <span class="flex-shrink mx-4 text-gray-400 text-xs uppercase font-semibold">Atanapi Presensi Manual</span>
+                    <div class="flex-grow border-t border-gray-200"></div>
+                </div>
+
+                <!-- TOMBOL MANUAL (MASUK & PULANG) -->
                 <div class="flex justify-center gap-4">
                     <!-- Tombol Masuk -->
                     <form action="{{ route('siswa.presensi.store') }}" method="POST">
