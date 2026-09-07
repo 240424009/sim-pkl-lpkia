@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Siswa\PresensiController;
 use App\Http\Controllers\PerizinanController;
 use App\Models\User;
+use App\Models\Presensi;
 
 // Redirect Halaman Utama ka Login
 Route::get('/', function () {
@@ -52,7 +53,11 @@ Route::middleware(['auth'])->group(function () {
         // 🟢 DASHBOARD ADMIN (TAMPILKAN TOTAL SISWA PKL)
         Route::get('/dashboard', function () {
             $totalSiswa = User::where('role', 'siswa')->count();
-            return view('admin.dashboard', compact('totalSiswa'));
+            
+            // Hitung jumlah siswa nu tos ngeusi presensi poé ieu
+            $presensiHariIniCount = Presensi::whereDate('tanggal', \Carbon\Carbon::today())->count();
+
+            return view('admin.dashboard', compact('totalSiswa', 'presensiHariIniCount'));
         })->name('dashboard');
 
         // Tampil QR Code Presensi Harian

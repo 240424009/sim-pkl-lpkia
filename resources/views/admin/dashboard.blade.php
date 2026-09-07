@@ -53,19 +53,19 @@
                     </div>
                 </div>
 
-                <!-- 📱 CARD 2: QR CODE PRESENSI -->
+                <!-- 📱 CARD 2: PRESENSI HARIAN (SUDAH DI-UPDATE HASIL DISIPIN) -->
                 <div class="group relative overflow-hidden bg-gradient-to-br from-sky-50/90 via-white to-blue-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-sky-100 hover:border-sky-400">
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-sky-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-sky-500"></div>
 
                     <div class="relative z-10 flex items-start justify-between">
                         <div>
-                            <p class="text-xs font-extrabold text-sky-900/60 uppercase tracking-wider">Presensi Harian</p>
-                            <h4 class="text-xl font-bold text-sky-950 mt-2">
-                                QR Code Presensi
+                            <p class="text-xs font-extrabold text-sky-900/60 uppercase tracking-wider">Presensi Harian (Hari Ini)</p>
+                            <h4 class="text-3xl font-black text-sky-950 mt-2 tracking-tight">
+                                {{ $presensiHariIniCount ?? 0 }} <span class="text-sm font-semibold text-slate-500">/ {{ $totalSiswa ?? 0 }} Siswa</span>
                             </h4>
                             <p class="text-xs text-slate-500 mt-1 line-clamp-2">
-                                Tampilkan QR Code harian untuk di-scan ku siswa PKL.
+                                Tampilkan QR Code harian untuk di-scan oleh siswa PKL
                             </p>
                             <a href="{{ route('admin.qr.index') }}" class="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
                                 Tampilkan QR Code
