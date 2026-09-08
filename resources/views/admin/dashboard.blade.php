@@ -131,47 +131,51 @@
             </div>
 
             <!-- 📋 TABEL RINGKASAN PRESENSI HARI INI -->
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 overflow-hidden">
-                <div class="flex items-center justify-between mb-4">
+            <div class="bg-gradient-to-b from-white via-slate-50/50 to-blue-50/30 rounded-2xl shadow-sm border border-slate-200 p-6 overflow-hidden relative">
+                <!-- Hiasan Blur Background Soft -->
+                <div class="absolute -top-12 -right-12 w-40 h-40 bg-blue-400/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="relative z-10 flex items-center justify-between mb-5">
                     <div>
-                        <h3 class="text-base font-extrabold text-slate-800">Presensi Masuk Hari Ini</h3>
-                        <p class="text-xs text-slate-500">Ringkasan 5 siswa terbaru yang melakukan scan QR code hari ini.</p>
+                        <h3 class="text-lg font-black text-slate-800 tracking-tight">Presensi Masuk Hari Ini</h3>
+                        <p class="text-xs font-medium text-slate-500 mt-0.5">Ringkasan 5 siswa terbaru yang melakukan scan QR code hari ini.</p>
                     </div>
 
-                    <!-- 🟢 LINK DISISIPKEUN DI DIEU (DIPASANG TOMBOL KA HALAMAN REKAP DETAIL) -->
-                    <a href="{{ route('admin.presensi.rekap') }}" class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                    <a href="{{ route('admin.presensi.rekap') }}" class="inline-flex items-center text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-100/80 hover:bg-blue-200/80 px-4 py-2 rounded-xl transition-all duration-200 shadow-xs border border-blue-200/50">
                         Lihat Selengkapnya
-                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                        <svg class="w-4 h-4 ml-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                     </a>
                 </div>
 
-                <div class="overflow-x-auto">
+                <!-- Container Tabel ku Background & Border Modern -->
+                <div class="relative z-10 overflow-x-auto rounded-xl border border-slate-200/80 shadow-xs bg-white">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
-                                <th class="py-3 px-4 rounded-l-lg">Nama Siswa</th>
-                                <th class="py-3 px-4">Waktu Scan</th>
-                                <th class="py-3 px-4 rounded-r-lg">Status</th>
+                            <tr class="border-b border-slate-200 text-xs font-extrabold text-slate-700 uppercase tracking-wider bg-gradient-to-r from-slate-100 via-blue-50/60 to-slate-100">
+                                <th class="py-3.5 px-5">Nama Siswa</th>
+                                <th class="py-3.5 px-5">Waktu Scan</th>
+                                <th class="py-3.5 px-5 text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100 text-xs">
+                        <tbody class="divide-y divide-slate-100 text-sm">
                             @forelse($presensiHariIni as $item)
-                                <tr class="hover:bg-slate-50/80 transition-colors">
-                                    <td class="py-3 px-4 font-bold text-slate-700">
+                                <tr class="hover:bg-blue-50/40 transition-colors">
+                                    <td class="py-4 px-5 font-bold text-slate-800">
                                         {{ $item->user->name ?? 'Siswa' }}
                                     </td>
-                                    <td class="py-3 px-4 text-slate-500">
+                                    <td class="py-4 px-5 text-slate-600 font-semibold">
                                         {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB
                                     </td>
-                                    <td class="py-3 px-4">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
-                                            ● Hadir
+                                    <td class="py-4 px-5 text-right">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-700 border border-emerald-300 shadow-2xs">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                                            Hadir
                                         </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-6 text-center text-slate-400 italic">
+                                    <td colspan="3" class="py-8 text-center text-slate-400 font-medium italic bg-slate-50/60">
                                         Belum ada siswa yang melakukan presensi hari ini.
                                     </td>
                                 </tr>
