@@ -130,13 +130,19 @@
 
             </div>
 
-            <!-- 📋 TABEL RINGKASAN PRESENSI HARI INI (DISISIPKEUN DINU BALEBAH IEU) -->
+            <!-- 📋 TABEL RINGKASAN PRESENSI HARI INI -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 overflow-hidden">
                 <div class="flex items-center justify-between mb-4">
                     <div>
                         <h3 class="text-base font-extrabold text-slate-800">Presensi Masuk Hari Ini</h3>
                         <p class="text-xs text-slate-500">Ringkasan 5 siswa terbaru yang melakukan scan QR code hari ini.</p>
                     </div>
+
+                    <!-- 🟢 LINK DISISIPKEUN DI DIEU (DIPASANG TOMBOL KA HALAMAN REKAP DETAIL) -->
+                    <a href="{{ route('admin.presensi.rekap') }}" class="inline-flex items-center text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors">
+                        Lihat Selengkapnya
+                        <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
                 </div>
 
                 <div class="overflow-x-auto">

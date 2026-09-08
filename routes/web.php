@@ -92,6 +92,9 @@ Route::middleware(['auth'])->group(function () {
         // 🟢 ROUTE PRESENSI MANUAL KHUSUS ADMIN
         Route::get('/presensi-manual', [\App\Http\Controllers\Admin\SiswaController::class, 'createPresensiManual'])->name('presensi.manual.create');
         Route::post('/presensi-manual', [\App\Http\Controllers\Admin\SiswaController::class, 'storePresensiManual'])->name('presensi.manual.store');
+    
+        // 🟢 ROUTE REKAP PRESENSI ADMIN
+        Route::get('/presensi-rekap', [\App\Http\Controllers\Admin\PresensiAdminController::class, 'index'])->name('presensi.rekap');
     });
 
     // === ROUTE SISWA (Anak SMK) ===
