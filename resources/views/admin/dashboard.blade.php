@@ -42,7 +42,7 @@
                             <h4 class="text-4xl font-black text-indigo-950 mt-2 tracking-tight">
                                 {{ $totalSiswa ?? 0 }}
                             </h4>
-                            <a href="{{ route('admin.siswa.index') }}" class="inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
+                            <a href="{{ route('admin.siswa.index') }}" class="inline-flex items-center text-xs font-bold text-indigo-600 hover:text-indigo-800 mt-4 group-hover:translate-x-1 transition-transform duration-200 after:absolute after:inset-0">
                                 Lihat Detail Data Siswa
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
@@ -53,7 +53,7 @@
                     </div>
                 </div>
 
-                <!-- 📱 CARD 2: PRESENSI HARIAN (SUDAH DI-UPDATE HASIL DISIPIN) -->
+                <!-- 📱 CARD 2: PRESENSI HARIAN -->
                 <div class="group relative overflow-hidden bg-gradient-to-br from-sky-50/90 via-white to-blue-50/60 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200 border border-sky-100 hover:border-sky-400">
                     <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-sky-500/10 rounded-full blur-xl pointer-events-none group-hover:scale-150 transition-transform duration-300"></div>
                     <div class="absolute top-0 left-0 w-1.5 h-full bg-sky-500"></div>
@@ -65,9 +65,9 @@
                                 {{ $presensiHariIniCount ?? 0 }} <span class="text-sm font-semibold text-slate-500">/ {{ $totalSiswa ?? 0 }} Siswa</span>
                             </h4>
                             <p class="text-xs text-slate-500 mt-1 line-clamp-2">
-                                Tampilkan QR Code harian untuk di-scan oleh siswa PKL
+                                Tampilkan QR Code harian untuk di-scan oleh siswa PKL.
                             </p>
-                            <a href="{{ route('admin.qr.index') }}" class="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
+                            <a href="{{ route('admin.qr.index') }}" class="inline-flex items-center text-xs font-bold text-sky-600 hover:text-sky-800 mt-4 group-hover:translate-x-1 transition-transform duration-200 after:absolute after:inset-0">
                                 Tampilkan QR Code
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
@@ -92,7 +92,7 @@
                             <p class="text-xs text-slate-500 mt-1 line-clamp-2">
                                 Cek dan berikan penilaian / approval jurnal siswa.
                             </p>
-                            <a href="{{ route('admin.jurnal.index') }}" class="inline-flex items-center text-xs font-bold text-emerald-600 hover:text-emerald-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
+                            <a href="{{ route('admin.jurnal.index') }}" class="inline-flex items-center text-xs font-bold text-emerald-600 hover:text-emerald-800 mt-4 group-hover:translate-x-1 transition-transform duration-200 after:absolute after:inset-0">
                                 Buka Verifikasi
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
@@ -117,7 +117,7 @@
                             <p class="text-xs text-slate-500 mt-1 line-clamp-2">
                                 Cek surat izin & ketidakhadiran siswa PKL.
                             </p>
-                            <a href="{{ route('admin.perizinan.index') }}" class="inline-flex items-center text-xs font-bold text-amber-600 hover:text-amber-800 mt-4 group-hover:translate-x-1 transition-transform duration-200">
+                            <a href="{{ route('admin.perizinan.index') }}" class="inline-flex items-center text-xs font-bold text-amber-600 hover:text-amber-800 mt-4 group-hover:translate-x-1 transition-transform duration-200 after:absolute after:inset-0">
                                 Buka Verifikasi
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </a>
@@ -128,6 +128,51 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- 📋 TABEL RINGKASAN PRESENSI HARI INI (DISISIPKEUN DINU BALEBAH IEU) -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 overflow-hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-base font-extrabold text-slate-800">Presensi Masuk Hari Ini</h3>
+                        <p class="text-xs text-slate-500">Ringkasan 5 siswa terbaru yang melakukan scan QR code hari ini.</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                                <th class="py-3 px-4 rounded-l-lg">Nama Siswa</th>
+                                <th class="py-3 px-4">Waktu Scan</th>
+                                <th class="py-3 px-4 rounded-r-lg">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-xs">
+                            @forelse($presensiHariIni as $item)
+                                <tr class="hover:bg-slate-50/80 transition-colors">
+                                    <td class="py-3 px-4 font-bold text-slate-700">
+                                        {{ $item->user->name ?? 'Siswa' }}
+                                    </td>
+                                    <td class="py-3 px-4 text-slate-500">
+                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB
+                                    </td>
+                                    <td class="py-3 px-4">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">
+                                            ● Hadir
+                                        </span>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="py-6 text-center text-slate-400 italic">
+                                        Belum ada siswa yang melakukan presensi hari ini.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
         </div>

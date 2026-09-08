@@ -17,15 +17,15 @@ Route::middleware(['auth'])->group(function () {
 
     // === ROUTE BUKTI PERIZINAN ===
     Route::get('/preview-bukti/{path}', function ($path) {
-    // Maca langsung ka storage/app/public dumasar kana path nu dikirim
-    $filePath = storage_path('app/public/' . urldecode($path));
+        // Maca langsung ka storage/app/public dumasar kana path nu dikirim
+        $filePath = storage_path('app/public/' . urldecode($path));
 
-    if (!file_exists($filePath)) {
-        abort(404);
-    }
+        if (!file_exists($filePath)) {
+            abort(404);
+        }
 
-    return response()->file($filePath);
-})->where('path', '.*')->name('preview.bukti');
+        return response()->file($filePath);
+    })->where('path', '.*')->name('preview.bukti');
 
     // === ROUTE PROFILE (Bawaan Breeze) ===
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -50,14 +50,23 @@ Route::middleware(['auth'])->group(function () {
     // === ROUTE ADMIN (Pembimbing LPKIA) ===
     Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
         
-        // 🟢 DASHBOARD ADMIN (TAMPILKAN TOTAL SISWA PKL)
+        // 🟢 DASHBOARD ADMIN (TAMPILKAN TOTAL SISWA & PRESENSI HARI INI)
         Route::get('/dashboard', function () {
             $totalSiswa = User::where('role', 'siswa')->count();
             
             // Hitung jumlah siswa nu tos ngeusi presensi poé ieu
             $presensiHariIniCount = Presensi::whereDate('tanggal', \Carbon\Carbon::today())->count();
 
-            return view('admin.dashboard', compact('totalSiswa', 'presensiHariIniCount'));
+            // Data 5 siswa pang-enggalna nu scan poe ieu kanggo tabel ringkasan
+            $presensiHariIni = Presensi::whereDate('tanggal', \Carbon\Carbon::today())
+                ->whereHas('user') // Ngan ngambil data nu gaduh relasi user
+                ->get()
+                ->sortBy(function ($item) {
+                    return strtolower($item->user->name ?? '');
+                })
+                ->take(5);
+
+            return view('admin.dashboard', compact('totalSiswa', 'presensiHariIniCount', 'presensiHariIni'));
         })->name('dashboard');
 
         // Tampil QR Code Presensi Harian
