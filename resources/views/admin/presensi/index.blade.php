@@ -74,23 +74,49 @@
                         <tbody class="divide-y divide-slate-100 text-sm">
                             @forelse($presensi as $item)
                                 <tr class="hover:bg-blue-50/40 transition-colors">
+                                    <!-- 1. Kolom Tanggal -->
                                     <td class="py-4 px-5 font-semibold text-slate-600">
                                         {{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d F Y') }}
                                     </td>
+
+                                    <!-- 2. Kolom Nama Siswa -->
                                     <td class="py-4 px-5 font-bold text-slate-800">
                                         {{ $item->user->name ?? 'Siswa (Terhapus)' }}
                                     </td>
+
+                                    <!-- 3. Kolom Jam Masuk -->
                                     <td class="py-4 px-5 font-bold text-emerald-600">
                                         {{ $item->jam_masuk ?? '-' }}
                                     </td>
+
+                                    <!-- 4. Kolom Jam Pulang -->
                                     <td class="py-4 px-5 font-bold text-amber-600">
                                         {{ $item->jam_pulang ?? '-' }}
                                     </td>
+
+                                    <!-- 5. Kolom Status -->
                                     <td class="py-4 px-5 text-right">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300/60 shadow-2xs">
-                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-                                            Hadir
-                                        </span>
+                                        @if(($item->status ?? 'hadir') == 'izin' || ($item->status ?? 'hadir') == 'ijin')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>
+                                                Izin
+                                            </span>
+                                        @elseif(($item->status ?? 'hadir') == 'sakit')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800 border border-blue-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span>
+                                                Sakit
+                                            </span>
+                                        @elseif(($item->status ?? 'hadir') == 'alpha')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>
+                                                Alpha
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                                                Hadir
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty

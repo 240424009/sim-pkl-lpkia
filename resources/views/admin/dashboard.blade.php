@@ -147,7 +147,7 @@
                     </a>
                 </div>
 
-                <!-- Container Tabel ku Background & Border Modern -->
+                <!-- Container Tabel -->
                 <div class="relative z-10 overflow-x-auto rounded-xl border border-slate-200/80 shadow-xs bg-white">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -160,17 +160,39 @@
                         <tbody class="divide-y divide-slate-100 text-sm">
                             @forelse($presensiHariIni as $item)
                                 <tr class="hover:bg-blue-50/40 transition-colors">
+                                    <!-- 1. Nama Siswa -->
                                     <td class="py-4 px-5 font-bold text-slate-800">
                                         {{ $item->user->name ?? 'Siswa' }}
                                     </td>
+
+                                    <!-- 2. Waktu Scan -->
                                     <td class="py-4 px-5 text-slate-600 font-semibold">
-                                        {{ \Carbon\Carbon::parse($item->created_at)->format('H:i') }} WIB
+                                        {{ $item->jam_masuk ? \Carbon\Carbon::parse($item->jam_masuk)->format('H:i') . ' WIB' : '-' }}
                                     </td>
+
+                                    <!-- 3. Status Dinamis -->
                                     <td class="py-4 px-5 text-right">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-700 border border-emerald-300 shadow-2xs">
-                                            <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
-                                            Hadir
-                                        </span>
+                                        @if(($item->status ?? 'hadir') == 'izin' || ($item->status ?? 'hadir') == 'ijin')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-amber-500 mr-1.5"></span>
+                                                Izin
+                                            </span>
+                                        @elseif(($item->status ?? 'hadir') == 'sakit')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-blue-100 text-blue-800 border border-blue-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-1.5"></span>
+                                                Sakit
+                                            </span>
+                                        @elseif(($item->status ?? 'hadir') == 'alpha')
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-rose-100 text-rose-800 border border-rose-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-rose-500 mr-1.5"></span>
+                                                Alpha
+                                            </span>
+                                        @else
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+                                                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+                                                Hadir
+                                            </span>
+                                        @endif
                                     </td>
                                 </tr>
                             @empty
