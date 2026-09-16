@@ -137,8 +137,8 @@
 
                 <div class="relative z-10 flex items-center justify-between mb-5">
                     <div>
-                        <h3 class="text-lg font-black text-slate-800 tracking-tight">Presensi Masuk Hari Ini</h3>
-                        <p class="text-xs font-medium text-slate-500 mt-0.5">Ringkasan 5 siswa terbaru yang melakukan scan QR code hari ini.</p>
+                        <h3 class="text-lg font-black text-slate-800 tracking-tight">Presensi Hari Ini</h3>
+                        <p class="text-xs font-medium text-slate-500 mt-0.5">Ringkasan 5 siswa terbaru yang melakukan presensi hari ini.</p>
                     </div>
 
                     <a href="{{ route('admin.presensi.rekap') }}" class="inline-flex items-center text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-100/80 hover:bg-blue-200/80 px-4 py-2 rounded-xl transition-all duration-200 shadow-xs border border-blue-200/50">
@@ -153,7 +153,8 @@
                         <thead>
                             <tr class="border-b border-slate-200 text-xs font-extrabold text-slate-700 uppercase tracking-wider bg-gradient-to-r from-slate-100 via-blue-50/60 to-slate-100">
                                 <th class="py-3.5 px-5">Nama Siswa</th>
-                                <th class="py-3.5 px-5">Waktu Scan</th>
+                                <th class="py-3.5 px-5">Jam Masuk</th>
+                                <th class="py-3.5 px-5">Jam Pulang</th>
                                 <th class="py-3.5 px-5 text-right">Status</th>
                             </tr>
                         </thead>
@@ -165,12 +166,17 @@
                                         {{ $item->user->name ?? 'Siswa' }}
                                     </td>
 
-                                    <!-- 2. Waktu Scan -->
-                                    <td class="py-4 px-5 text-slate-600 font-semibold">
+                                    <!-- 2. Jam Masuk -->
+                                    <td class="py-4 px-5 text-emerald-600 font-bold">
                                         {{ $item->jam_masuk ? \Carbon\Carbon::parse($item->jam_masuk)->format('H:i') . ' WIB' : '-' }}
                                     </td>
 
-                                    <!-- 3. Status Dinamis -->
+                                    <!-- 3. Jam Pulang -->
+                                    <td class="py-4 px-5 text-amber-600 font-bold">
+                                        {{ $item->jam_pulang ? \Carbon\Carbon::parse($item->jam_pulang)->format('H:i') . ' WIB' : '-' }}
+                                    </td>
+
+                                    <!-- 4. Status Dinamis -->
                                     <td class="py-4 px-5 text-right">
                                         @if(($item->status ?? 'hadir') == 'izin' || ($item->status ?? 'hadir') == 'ijin')
                                             <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-black bg-amber-100 text-amber-800 border border-amber-300 shadow-2xs">
@@ -197,7 +203,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="py-8 text-center text-slate-400 font-medium italic bg-slate-50/60">
+                                    <td colspan="4" class="py-8 text-center text-slate-400 font-medium italic bg-slate-50/60">
                                         Belum ada siswa yang melakukan presensi hari ini.
                                     </td>
                                 </tr>
