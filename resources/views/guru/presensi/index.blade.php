@@ -14,15 +14,44 @@
                     <h3 class="text-lg font-bold text-gray-700">Rekapan Kehadiran Siswa</h3>
                     
                     <div class="flex flex-wrap items-center gap-3">
-                        <!-- FORM FILTER ASAL SEKOLAH -->
-                        <form method="GET" action="{{ route('guru.presensi') }}" class="flex items-center gap-2">
-                            <select name="sekolah" onchange="this.form.submit()" class="w-64 min-w-[220px] text-xs border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-2xs py-2 pl-3 pr-8 text-gray-700 truncate cursor-pointer">
+                        <!-- FORM FILTER (SEKOLAH, BULAN, TAHUN) -->
+                        <form method="GET" action="{{ route('guru.presensi') }}" class="flex flex-wrap items-center gap-2">
+    
+                            <!-- Filter Asal Sekolah -->
+                            <select name="sekolah" onchange="this.form.submit()" class="w-52 min-w-[180px] text-xs border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-2xs py-2 pl-3 pr-8 text-gray-700 truncate cursor-pointer">
                                 <option value="">-- Semua Sekolah --</option>
                                 @foreach($sekolahs as $sekolah)
                                     <option value="{{ $sekolah }}" {{ request('sekolah') == $sekolah ? 'selected' : '' }}>
                                         {{ $sekolah }}
                                     </option>
                                 @endforeach
+                            </select>
+
+                            <!-- Filter Bulan -->
+                            <select name="bulan" onchange="this.form.submit()" class="w-36 text-xs border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-2xs py-2 pl-3 pr-8 text-gray-700 cursor-pointer">
+                                <option value="">-- Bulan --</option>
+                                @php
+                                    $namaBulan = [
+                                        '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
+                                        '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
+                                        '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                                    ];
+                                @endphp
+                                @foreach($namaBulan as $key => $val)
+                                    <option value="{{ $key }}" {{ request('bulan') == $key ? 'selected' : '' }}>
+                                        {{ $val }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- Filter Tahun -->
+                            <select name="tahun" onchange="this.form.submit()" class="w-28 text-xs border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-2xs py-2 pl-3 pr-8 text-gray-700 cursor-pointer">
+                                <option value="">-- Tahun --</option>
+                                @for($y = date('Y'); $y >= date('Y') - 2; $y--)
+                                    <option value="{{ $y }}" {{ request('tahun') == $y ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endfor
                             </select>
                         </form>
 
@@ -31,8 +60,8 @@
                             ⬅️ Kembali
                         </a>
 
-                        <!-- TOMBOL EXPORT PDF (NGAIKUTAN FILTER SEKOLAH) -->
-                        <a href="{{ route('guru.presensi.pdf', ['sekolah' => request('sekolah')]) }}" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow transition inline-flex items-center gap-1">
+                        <!-- TOMBOL EXPORT PDF (NGAIKUTAN FILTER SEKOLAH & PERIODE) -->
+                        <a href="{{ route('guru.presensi.pdf', ['sekolah' => request('sekolah'), 'bulan' => request('bulan', $bulan ?? date('m')), 'tahun' => request('tahun', $tahun ?? date('Y'))]) }}" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow transition inline-flex items-center gap-1">
                             📄 Export PDF
                         </a>
                     </div>

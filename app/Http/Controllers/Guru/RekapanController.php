@@ -11,7 +11,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class RekapanController extends Controller
 {
-    // Rekapan Presensi Siswa (kalawan Filter Asal Sekolah)
+    // Rekapan Presensi Siswa (Filter Sekolah, Bulan & Tahun)
     public function presensi(Request $request)
     {
         // 1. Ambil daftar sekolah unik untuk dropdown filter
@@ -20,17 +20,28 @@ class RekapanController extends Controller
             ->distinct()
             ->pluck('asal_sekolah');
 
-        // 2. Query data siswa
-        $query = User::where('role', 'siswa')->with(['presensis']);
+        // 2. Ambil nilai filter bulan & tahun (default: bulan & tahun berjalan)
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
 
-        // 3. Filter jika dropdown sekolah dipilih
+        // 3. Query data siswa beserta presensi yang difilter bulan & tahun
+        $query = User::where('role', 'siswa')->with(['presensis' => function ($q) use ($bulan, $tahun) {
+            if ($bulan) {
+                $q->whereMonth('tanggal', $bulan);
+            }
+            if ($tahun) {
+                $q->whereYear('tanggal', $tahun);
+            }
+        }]);
+
+        // 4. Filter dumasar sekolah mun dipilih
         if ($request->filled('sekolah')) {
             $query->where('asal_sekolah', $request->sekolah);
         }
 
         $siswas = $query->get();
 
-        return view('guru.presensi.index', compact('siswas', 'sekolahs'));
+        return view('guru.presensi.index', compact('siswas', 'sekolahs', 'bulan', 'tahun'));
     }
 
     // Monitoring Jurnal Siswa
@@ -44,12 +55,21 @@ class RekapanController extends Controller
         return view('guru.jurnal.index', compact('jurnals'));
     }
 
-    // === FUNGSI EXPORT PDF (NGAIKUTAN FILTER SEKOLAH) ===
+    // === FUNGSI EXPORT PDF (NGAIKUTAN FILTER SEKOLAH & PERIODE) ===
     public function exportPresensiPdf(Request $request)
     {
-        $query = User::where('role', 'siswa')->with(['presensis']);
+        $bulan = $request->input('bulan', date('m'));
+        $tahun = $request->input('tahun', date('Y'));
 
-        // Jika sedang memfilter sekolah, PDF yang didownload hanya sekolah tersebut
+        $query = User::where('role', 'siswa')->with(['presensis' => function ($q) use ($bulan, $tahun) {
+            if ($bulan) {
+                $q->whereMonth('tanggal', $bulan);
+            }
+            if ($tahun) {
+                $q->whereYear('tanggal', $tahun);
+            }
+        }]);
+
         if ($request->filled('sekolah')) {
             $query->where('asal_sekolah', $request->sekolah);
         }
@@ -58,12 +78,11 @@ class RekapanController extends Controller
         $sekolahFilter = $request->sekolah ?? 'Semua Sekolah';
 
         // Load view khusus PDF
-        $pdf = Pdf::loadView('guru.presensi.pdf', compact('siswas', 'sekolahFilter'));
+        $pdf = Pdf::loadView('guru.presensi.pdf', compact('siswas', 'sekolahFilter', 'bulan', 'tahun'));
 
-        // Nama file PDF menyesuaikan filter
-        $namaFile = $request->filled('sekolah') 
-            ? 'Rekapan_Presensi_' . str_replace(' ', '_', $request->sekolah) . '.pdf' 
-            : 'Rekapan_Presensi_Semua_Siswa.pdf';
+        // Nama file PDF dinamis menyesuaikan filter
+        $strSekolah = $request->filled('sekolah') ? str_replace(' ', '_', $request->sekolah) : 'Semua_Sekolah';
+        $namaFile = 'Rekapan_Presensi_' . $strSekolah . '_' . $bulan . '_' . $tahun . '.pdf';
 
         return $pdf->download($namaFile);
     }
