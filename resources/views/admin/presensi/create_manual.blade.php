@@ -39,14 +39,22 @@
                         </select>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-1">Tanggal</label>
+                        <input type="date" name="tanggal" value="{{ date('Y-m-d') }}" class="w-full text-sm rounded-lg border-gray-300" required>
+                    </div>
+
+                    <!-- GRID JAM MASUK & JAM PULANG -->
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-1">Tanggal</label>
-                            <input type="date" name="tanggal" value="{{ date('Y-m-d') }}" class="w-full text-sm rounded-lg border-gray-300" required>
-                        </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-1">Jam Masuk</label>
                             <input type="time" name="jam_masuk" value="{{ date('H:i') }}" class="w-full text-sm rounded-lg border-gray-300" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-gray-700 mb-1">
+                                Jam Pulang <span class="text-xs text-gray-400 font-normal">(Opsional)</span>
+                            </label>
+                            <input type="time" name="jam_pulang" class="w-full text-sm rounded-lg border-gray-300">
                         </div>
                     </div>
 
