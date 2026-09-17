@@ -8,7 +8,16 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white p-6 rounded-lg shadow-sm">
-                <h3 class="text-lg font-bold text-gray-700 mb-4">Daftar Jurnal Siswa</h3>
+                
+                <!-- HEADER JUDUL JEUNG TOMBOL KEMBALI DI KATUHU -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <h3 class="text-lg font-bold text-gray-700">Daftar Jurnal Siswa</h3>
+                    
+                    <!-- TOMBOL KEMBALI KA DASHBOARD -->
+                    <a href="{{ route('guru.dashboard') }}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-bold rounded shadow transition inline-flex items-center gap-1">
+                        ⬅️ Kembali
+                    </a>
+                </div>
                 
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
