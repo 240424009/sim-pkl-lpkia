@@ -6,6 +6,7 @@ use App\Http\Controllers\Siswa\PresensiController;
 use App\Http\Controllers\PerizinanController;
 use App\Models\User;
 use App\Models\Presensi;
+use App\Http\Controllers\Guru\DashboardController as GuruDashboardController;
 
 // Redirect Halaman Utama ka Login
 Route::get('/', function () {
@@ -123,14 +124,45 @@ Route::middleware(['auth'])->group(function () {
 
     // === ROUTE GURU (Pembimbing Sekolah) ===
     Route::middleware(['role:guru'])->prefix('guru')->name('guru.')->group(function () {
+        
+        // 🟢 DASHBOARD GURU (RINGKASAN STATISTIK & LOG HARI INI)
         Route::get('/dashboard', function () {
-            return view('guru.dashboard');
+            $today = \Carbon\Carbon::today();
+
+            // Total Sadaya Siswa
+            $totalSiswa = User::where('role', 'siswa')->count();
+
+            // Data Presensi Hari Ini
+            $presensiHariIni = Presensi::with('user')
+                ->whereDate('tanggal', $today)
+                ->latest('jam_masuk')
+                ->get();
+
+            // Hitung Statistik
+            $totalHadir = $presensiHariIni->where('status', 'hadir')->count();
+            $totalIzinSakit = $presensiHariIni->whereIn('status', ['izin', 'ijin', 'sakit'])->count();
+            $totalAlpha = $presensiHariIni->where('status', 'alfa')->count();
+
+            // 5 Jurnal Kegiatan Terakhir
+            $jurnalTerbaru = \App\Models\JurnalKegiatan::with('user')
+                ->latest('tanggal')
+                ->take(5)
+                ->get();
+
+            return view('guru.dashboard', compact(
+                'totalSiswa',
+                'presensiHariIni',
+                'totalHadir',
+                'totalIzinSakit',
+                'totalAlpha',
+                'jurnalTerbaru'
+            ));
         })->name('dashboard');
 
         // Monitoring & Rekapan Guru
-        Route::get('/presensi', [\App\Http\Controllers\Guru\RekapanController::class, 'presensi'])->name('presensi.index');
+        Route::get('/presensi', [\App\Http\Controllers\Guru\RekapanController::class, 'presensi'])->name('presensi');
         Route::get('/presensi/export-pdf', [\App\Http\Controllers\Guru\RekapanController::class, 'exportPresensiPdf'])->name('presensi.pdf');
-        Route::get('/jurnal', [\App\Http\Controllers\Guru\RekapanController::class, 'jurnal'])->name('jurnal.index');
+        Route::get('/jurnal', [\App\Http\Controllers\Guru\RekapanController::class, 'jurnal'])->name('jurnal');
     });
 
 });
