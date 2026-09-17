@@ -73,8 +73,10 @@
                             <tr class="bg-gray-100 text-gray-600 uppercase text-xs">
                                 <th class="py-3 px-4">Nama Siswa</th>
                                 <th class="py-3 px-4">Email</th>
-                                <th class="py-3 px-4 text-center">Total Hadir</th>
-                                <th class="py-3 px-4 text-center">Total Terlambat</th>
+                                <th class="py-3 px-4 text-center">Hadir</th>
+                                <th class="py-3 px-4 text-center">Terlambat</th>
+                                <th class="py-3 px-4 text-center">Izin</th>
+                                <th class="py-3 px-4 text-center">Sakit</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y text-sm">
@@ -85,20 +87,38 @@
                                         <div class="text-xs text-gray-400 font-normal">{{ $siswa->asal_sekolah ?? '-' }}</div>
                                     </td>
                                     <td class="py-3 px-4 text-gray-600">{{ $siswa->email }}</td>
+                                    
+                                    <!-- HADIR -->
                                     <td class="py-3 px-4 text-center">
                                         <span class="bg-green-100 text-green-800 text-xs px-2.5 py-1 rounded font-bold">
                                             {{ $siswa->presensis->where('status', 'hadir')->count() }} Hari
                                         </span>
                                     </td>
+                                    
+                                    <!-- TERLAMBAT -->
                                     <td class="py-3 px-4 text-center">
                                         <span class="bg-yellow-100 text-yellow-800 text-xs px-2.5 py-1 rounded font-bold">
                                             {{ $siswa->presensis->where('status', 'terlambat')->count() }} Hari
                                         </span>
                                     </td>
+
+                                    <!-- IZIN -->
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="bg-blue-100 text-blue-800 text-xs px-2.5 py-1 rounded font-bold">
+                                            {{ $siswa->presensis->where('status', 'izin')->count() }} Hari
+                                        </span>
+                                    </td>
+
+                                    <!-- SAKIT -->
+                                    <td class="py-3 px-4 text-center">
+                                        <span class="bg-purple-100 text-purple-800 text-xs px-2.5 py-1 rounded font-bold">
+                                            {{ $siswa->presensis->where('status', 'sakit')->count() }} Hari
+                                        </span>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="text-center py-4 text-gray-500">Belum ada data siswa.</td>
+                                    <td colspan="6" class="text-center py-4 text-gray-500">Belum ada data siswa.</td>
                                 </tr>
                             @endforelse
                         </tbody>
