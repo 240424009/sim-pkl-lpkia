@@ -18,18 +18,23 @@ class PresensiAdminController extends Controller
             $query->whereDate('tanggal', $request->tanggal);
         }
 
-        // Filter dumasar Nama Siswa
-        if ($request->filled('siswa_id')) {
-            $query->where('user_id', $request->siswa_id);
+        // Filter dumasar Sekolah Asal (ngalewatan relasi user)
+        if ($request->filled('sekolah')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('asal_sekolah', $request->sekolah);
+            });
         }
 
         // Urutkeun ti data pang-enggalna
         $presensi = $query->latest('tanggal')->latest('created_at')->paginate(15);
 
-        // Ambil sadaya data siswa kanggo pilihan dropdown filter
-        $listSiswa = User::where('role', 'siswa')->orderBy('name', 'asc')->get();
+        // Ambil daftar sekolah unik kanggo pilihan dropdown filter
+        $sekolahs = User::where('role', 'siswa')
+            ->whereNotNull('asal_sekolah')
+            ->distinct()
+            ->pluck('asal_sekolah');
 
-        return view('admin.presensi.index', compact('presensi', 'listSiswa'));
+        return view('admin.presensi.index', compact('presensi', 'sekolahs'));
     }
 
     /**

@@ -34,12 +34,12 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Filter Siswa</label>
-                        <select name="siswa_id" class="w-full text-sm font-medium rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500 py-2">
-                            <option value="">-- Semua Siswa --</option>
-                            @foreach($listSiswa as $siswa)
-                                <option value="{{ $siswa->id }}" {{ request('siswa_id') == $siswa->id ? 'selected' : '' }}>
-                                    {{ $siswa->name }}
+                        <label class="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">Filter Sekolah Asal</label>
+                        <select name="sekolah" class="w-full text-sm font-medium rounded-xl border-slate-200 focus:border-blue-500 focus:ring-blue-500 py-2">
+                            <option value="">-- Semua Sekolah Asal --</option>
+                            @foreach($sekolahs as $sekolah)
+                                <option value="{{ $sekolah }}" {{ request('sekolah') == $sekolah ? 'selected' : '' }}>
+                                    {{ $sekolah }}
                                 </option>
                             @endforeach
                         </select>
@@ -49,7 +49,7 @@
                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm py-2 px-4 rounded-xl shadow-xs transition-all duration-200">
                             Cari Data
                         </button>
-                        @if(request('tanggal') || request('siswa_id'))
+                        @if(request('tanggal') || request('sekolah'))
                             <a href="{{ route('admin.presensi.rekap') }}" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm py-2 px-4 rounded-xl transition-colors">
                                 Reset
                             </a>
